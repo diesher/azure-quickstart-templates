@@ -16,7 +16,9 @@ sudo apt-get install bind9 -y
 # configure Bind9 for forwarding
 sudo cat > named.conf.options << EndOFNamedConfOptions
 acl goodclients {
-    $2;
+    "10.0.0.0/8";
+    "172.16.0.0/12";
+    "192.168.0.0/16";
     localhost;
     localnets;
 };
@@ -29,11 +31,11 @@ options {
         allow-query { goodclients; };
 
         forwarders {
-            $1;
+            168.63.129.16; # This is the well-known standard IP in Azure
         };
         forward only;
 
-        dnssec-validation auto;
+        dnssec-validation yes;
 
         auth-nxdomain no;    # conform to RFC1035
         listen-on { any; };
